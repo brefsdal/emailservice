@@ -1,0 +1,8 @@
+*.iml
+.idea
+env
+config.cfg
+build
+*.pyc
+dist
+*.egg-info

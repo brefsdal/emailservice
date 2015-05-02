@@ -1,0 +1,10 @@
+nose==1.3.6
+pep8==1.6.2
+redis
+tornado==4.1
+tornado-redis
+celery
+tornado-celery
+mandrill
+pycurl
+requests
