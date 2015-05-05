@@ -14,6 +14,7 @@ import tornado.options
 import tornado.web
 from tornado.web import RequestHandler, asynchronous
 from tornado.options import define, options
+from validate_email import validate_email
 
 import tasks
 
@@ -31,27 +32,34 @@ logger = logging.getLogger("emailhandler")
 
 class EmailAsyncHandler(RequestHandler):
 
-    #@asynchronous
-    # def get(self):
-    #     data = {
-    #         'to': 'somebody@gmail.com',
-    #         'subject': 'test subject',
-    #         'text': 'this is the body'
-    #     }
-    #     self.write(json.dumps(data))
+    def get(self):
+        data = {
+            'to': 'somebody@gmail.com',
+            'subject': 'test subject',
+            'text': 'this is the body'
+        }
+        self.write(json.dumps(data))
 
-    @asynchronous
     def post(self):
-        if len(self.request.body) > 0:
-            logger.info("request body => {0}".format(self.request.body))
+        if not self.request.body:
+            return self.error(400, "Empty request")
+        logger.info("request body => {0}".format(self.request.body))
+        try:
             obj = json.loads(self.request.body)
-            logger.info("json body => {0}".format(obj))
-            tasks.send.apply_async(args=[obj['to'], obj['subject'], obj['text']], callback=self.on_result)
+        except:
+            return self.error(400, "Invalid json")
+        logger.info("json body => {0}".format(obj))
+        if 'to' not in obj or 'subject' not in obj or 'text' not in obj:
+            return self.error(400, "Must include 'to', 'subject', and 'text'")
+        if not validate_email(obj['to']):
+            return self.error(400, "'to' must be a valid email address")
+        result = tasks.send.apply_async(args=[obj['to'], obj['subject'], obj['text']])
+        self.write({'task-id': result.task_id, 'state': result.state})
 
-
-    def on_result(self, response):
-        self.write(str(response.result))
-        self.finish()
+    def error(self, status_code, error_msg):
+        self.clear()
+        self.set_status(status_code)
+        self.finish("<html><body>{0}</body></html>".format(error_msg))
 
 
 class Application(tornado.web.Application):

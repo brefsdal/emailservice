@@ -6,6 +6,9 @@ from emailservice.config import Config
 
 class MandrillApi(object):
 
+    def __init__(self):
+        pass
+
     message = {
         'attachments': [],
         'auto_html': None,
@@ -29,7 +32,7 @@ class MandrillApi(object):
         'recipient_metadata': [],
         'return_path_domain': None,
         'signing_domain': None,
-        'subaccount': 'me',
+        'subaccount': '',
         'subject': '',
         'tags': [],
         'text': '',
@@ -44,9 +47,12 @@ class MandrillApi(object):
     def send(cls, to, subject, msg):
         config = Config.get_config()
         apikey = config.get("mandrill", "apikey")
+        subaccount = config.get("mandrill", "subaccount")
         client = Mandrill(apikey)
         data = cls.message.copy()
         data['text'] = msg
         data['subject'] = subject
         data['to'][0]['email'] = to
-        result = client.messages.send(message = data, async=False, ip_pool='Main Pool')
+        data['subaccount'] = subaccount
+        result = client.messages.send(message=data, async=False, ip_pool='Main Pool')
+        return result[0]

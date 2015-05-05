@@ -28,4 +28,4 @@ class Config(object):
             cls.config = parser
             return cls.config
         else:
-            cls.config
+            return cls.config

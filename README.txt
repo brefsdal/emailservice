@@ -1,6 +1,6 @@
 04/30/2015
 
-Souffle
+Email Service
 
 Installing on Mac OSX
 
