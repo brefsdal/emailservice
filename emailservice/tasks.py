@@ -3,8 +3,8 @@ __author__ = 'brianrefsdal'
 import os
 import logging
 from celery import Celery
-from emailservice import mailgunapi
-from emailservice import mandrillapi
+import mailgunapi
+import mandrillapi
 
 logger = logging.getLogger("taskworker")
 

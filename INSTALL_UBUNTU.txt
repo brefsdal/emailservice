@@ -21,10 +21,14 @@ sudo apt-get update
 
 sudo apt-get upgrade
 
-sudo apt-get install htop emacs ngrep bwm-ng tcpdump gcc g++ rabbitmq-server redis-server python-pip libcurl4-openssl-dev python2.7-dev --fix-missing
+sudo apt-get install htop emacs ngrep bwm-ng tcpdump gcc g++ rabbitmq-server redis-server python-pip libcurl4-openssl-dev python2.7-dev git --fix-missing
 
 sudo pip install virtualenv
 
 # enable rabbitmq web interface
 
 rabbitmq-plugins enable rabbitmq_management
+
+
+# install emailservice
+pip install -U 'git+https://github.com/brefsdal/emailservice'
