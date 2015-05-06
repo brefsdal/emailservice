@@ -32,3 +32,6 @@ rabbitmq-plugins enable rabbitmq_management
 
 # install emailservice
 pip install -U 'git+https://github.com/brefsdal/emailservice'
+
+
+# copy the upstart scripts to /etc/init/

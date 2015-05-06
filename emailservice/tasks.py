@@ -11,7 +11,7 @@ logger = logging.getLogger("taskworker")
 celery = Celery("tasks", broker="amqp://")
 celery.conf.CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis')
 
-@celery.task
+@celery.task(name="emailservice.tasks.send")
 def send(to, subject, msg, retry=0):
     logger.info("sending to MailGun")
     mailgun_respcode, mailgun_message = MailGunApi.send(to, subject, msg)
