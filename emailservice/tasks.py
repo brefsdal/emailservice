@@ -3,8 +3,8 @@ __author__ = 'brianrefsdal'
 import os
 import logging
 from celery import Celery
-import mailgunapi
-import mandrillapi
+from emailservice.mailgunapi import MailGunApi
+from emailservice.mandrillapi import MandrillApi
 
 logger = logging.getLogger("taskworker")
 
@@ -14,9 +14,9 @@ celery.conf.CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'red
 @celery.task
 def send(to, subject, msg, retry=0):
     logger.info("sending to MailGun")
-    mailgun_respcode, mailgun_message = mailgunapi.MailGunApi.send(to, subject, msg)
+    mailgun_respcode, mailgun_message = MailGunApi.send(to, subject, msg)
     if int(mailgun_respcode) != 200:
-        mandrill_resp = mandrillapi.MandrillApi.send(to, subject, msg)
+        mandrill_resp = MandrillApi.send(to, subject, msg)
 
         if mandrill_resp['status'] != 'sent':
             if retry > 1:

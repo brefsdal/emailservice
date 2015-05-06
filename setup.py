@@ -11,7 +11,12 @@ version = "0.0.1"
 setup(
     name="emailservice",
     version=version,
-    packages=["emailservice", "emailservice.test"],
+    packages=[
+        "emailservice",
+        "emailservice.mailgunapi",
+        "emailservice.mandrillapi",
+        "emailservice.test"
+        ],
     package_dir={"emailservice": "emailservice"},
     package_data={"emailservice": ["emailservice.cfg"]},
     author="Brian Refsdal",
