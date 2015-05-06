@@ -12,7 +12,7 @@ class Config(object):
 
     @classmethod
     def get_filename(cls, filename="emailservice.cfg"):
-        home_dir = os.environ.get("HOME")
+        home_dir = os.environ.get("HOME", "")
         local_file = os.path.join(home_dir, ".{0}".format(filename))
         if os.path.isfile(local_file):
             return local_file

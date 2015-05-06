@@ -35,3 +35,5 @@ pip install -U 'git+https://github.com/brefsdal/emailservice'
 
 
 # copy the upstart scripts to /etc/init/
+
+# install the emailservice.cfg in the home dir
