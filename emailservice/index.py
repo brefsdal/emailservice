@@ -16,7 +16,7 @@ from tornado.web import RequestHandler, asynchronous
 from tornado.options import define, options
 from validate_email import validate_email
 
-from emailservice.tasks import send
+import emailservice.tasks
 
 
 #HOST='127.0.0.1'
@@ -53,7 +53,7 @@ class EmailAsyncHandler(RequestHandler):
             return self.error(400, "Must include 'to', 'subject', and 'text'")
         if not validate_email(obj['to']):
             return self.error(400, "'to' must be a valid email address")
-        result = send.apply_async(args=[obj['to'], obj['subject'], obj['text']])
+        result = emailservice.tasks.send.apply_async(args=[obj['to'], obj['subject'], obj['text']])
         self.write({'task-id': result.task_id, 'state': result.state})
 
     def error(self, status_code, error_msg):
