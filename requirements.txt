@@ -9,3 +9,4 @@ mandrill
 pycurl
 requests
 validate_email
+pep8

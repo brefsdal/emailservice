@@ -14,7 +14,7 @@ Content-Length: 76
 Content-Type: application/json; charset=utf-8
 
 {
-  "to": "someuser@gmail.com",
+  "to": ["someuser@gmail.com"],
   "subject": "Test Email",
   "text": "Hello World"
 }

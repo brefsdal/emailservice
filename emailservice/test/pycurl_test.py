@@ -1,7 +1,5 @@
-__author__ = 'brianrefsdal'
-
 import unittest
-import sys
+# import sys
 import pycurl
 import cStringIO
 
@@ -26,4 +24,3 @@ class PycurlTest(unittest.TestCase):
         cstring.close()
         c.close()
         self.assertEqual(result, '{"to": "somebody@gmail.com", "text": "this is the body", "subject": "test subject"}', 'pycurl failed')
-

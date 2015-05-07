@@ -1,13 +1,8 @@
-__author__ = 'brianrefsdal'
-
 from mandrill import Mandrill
 from emailservice.config import Config
 
 
 class MandrillApi(object):
-
-    def __init__(self):
-        pass
 
     message = {
         'attachments': [],
@@ -52,7 +47,7 @@ class MandrillApi(object):
         data = cls.message.copy()
         data['text'] = msg
         data['subject'] = subject
-        data['to'][0]['email'] = to
+        data['to'] = [{'email': e, 'type': 'to'} for e in to]
         data['subaccount'] = subaccount
         result = client.messages.send(message=data, async=False, ip_pool='Main Pool')
         return result[0]

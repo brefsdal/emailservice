@@ -1,17 +1,12 @@
-__author__ = 'brianrefsdal'
-
-import json
-import pycurl
-import urllib
-import cStringIO
+# import json
+# import pycurl
+# import urllib
+# import cStringIO
 import requests
 from emailservice.config import Config
 
 
 class MailGunApi(object):
-
-    def __init__(self):
-        pass
 
     @staticmethod
     def send(to, subject, msg):
@@ -21,15 +16,13 @@ class MailGunApi(object):
         url = 'https://api.mailgun.net/v3/sandbox{0}.mailgun.org/messages'.format(sandbox)
         data = {
             'from': 'Mailgun Sandbox <postmaster@sandbox{0}.mailgun.org>'.format(sandbox),
-            'to': to,
+            'to[]': to,
             'subject': subject,
             'text': msg
         }
         user, password = apikey.split(":")
-        response = requests.post(url, data, auth = (user, password))
+        response = requests.post(url, data, auth=(user, password))
         return response.status_code, response.json().get('message', '')
-
-
 
     # @staticmethod
     # def send(to, subject, msg):

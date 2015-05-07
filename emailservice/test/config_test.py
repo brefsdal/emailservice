@@ -1,5 +1,3 @@
-__author__ = 'brianrefsdal'
-
 import os
 import unittest
 from emailservice import config

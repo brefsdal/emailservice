@@ -1,6 +1,3 @@
-__author__ = 'brianrefsdal'
-
-
 import os
 import ConfigParser
 import emailservice

@@ -1,7 +1,3 @@
-__author__ = 'brianrefsdal'
-
-__author__ = 'brianrefsdal'
-
 import unittest
 import urllib
 
@@ -14,4 +10,3 @@ class UrlTest(unittest.TestCase):
         data = result.fp.read()
         self.assertEqual(result.code, 200, 'status code failed')
         self.assertEqual(data, '{"to": "somebody@gmail.com", "text": "this is the body", "subject": "test subject"}', 'url test failed')
-
