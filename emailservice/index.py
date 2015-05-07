@@ -49,6 +49,14 @@ class EmailAsyncHandler(RequestHandler):
         for email in obj['to']:
             if not validate_email(email):
                 return self.error(400, "'to' {0} must be a valid email address".format(email))
+        if not obj['text']:
+            return self.error(400, "'text' body cannot be empty")
+        if not obj['subject']:
+            return self.error(400, "'subject' line cannot be empty")
+        if len(obj['text']) > 1048576:
+            return self.error(400, "'text' body cannot be larger than 1MB")
+        if len(obj['subject']) > 78:
+            return self.error(400, "'subject' line cannot be larger than 78 characters")
         # TODO: Implement file attachments
         result = emailservice.tasks.send.apply_async(args=[obj['to'], obj['subject'], obj['text']])
         self.write({'task-id': result.task_id, 'state': result.state})
