@@ -10,8 +10,8 @@ celery = Celery("tasks", broker="amqp://")
 celery.conf.CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis')
 
 
-@celery.task(name="emailservice.tasks.send")
-def send(to, subject, msg, retry=0):
+@celery.task(bind=True, name="emailservice.tasks.send", default_retry_delay=5 * 60)
+def send(self, to, subject, msg):
     """
 
     :param to: list of email addresses
@@ -21,18 +21,16 @@ def send(to, subject, msg, retry=0):
     :return:
     """
 
-    logger.info("sending to MailGun")
+    logger.info("sending to Mailgun")
     mailgun_respcode, mailgun_message = MailGunApi.send(to, subject, msg)
     if int(mailgun_respcode) != 200:
+        logger.info("sending to Mandrill")
         mandrill_resp = MandrillApi.send(to, subject, msg)
-
         if mandrill_resp['status'] != 'sent':
-            if retry > 1:
-                logger.error("Connect to mailgun or mandrill after {0} attempts...".format(retry))
-                return
-            # TODO: Implement exponential backoff
-            logger.error("Cannot connect to mailgun or mandrill, retrying...")
-            send(to, subject, msg, retry + 1)
+            logger.error("Cannot connect to Mailgun or Mandrill, retrying...")
+            # Default number of reties is 3
+            # Retry delay is 5 minutes
+            self.retry()
 
 
 if __name__ == "__main__":
